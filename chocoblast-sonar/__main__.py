@@ -11,7 +11,7 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 con = sqlite3.connect("chocoblast.db")
 cursor = con.cursor()
 cursor.execute("""CREATE TABLE IF NOT EXISTS statistics (
-    user_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL UNIQUE,
     chocoblasted INTEGER NOT NULL DEFAULT 0
 );""")
 con.commit()
