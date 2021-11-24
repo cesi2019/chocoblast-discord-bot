@@ -3,7 +3,6 @@ FROM alpine
 RUN apk add --no-cache python3 py3-pip
 
 ADD chocoblast-sonar /tmp/chocoblast-sonar
-ADD .env .
 ADD requirements.txt /tmp
 ADD setup.py /tmp
 
