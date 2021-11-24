@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import sqlite3
 
 load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = os.getenv("DISCORD_TOKEN", "")
 
 con = sqlite3.connect("chocoblast.db")
 cursor = con.cursor()
