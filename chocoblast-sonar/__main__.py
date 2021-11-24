@@ -46,10 +46,11 @@ class ChocoblastClient(Client):
         embed = Embed()
         embed.set_image(url = "https://media.giphy.com/media/3o7TKD4yHgfzuvGWcg/giphy.gif")
 
-        sended_message = await message.reply(embed = embed)
+        sended_message = await message.reply(f"<@{message.author.id}> Nous offre les chocos !!!", embed = embed)
 
         philhead = discord.utils.get(message.guild.emojis, name="philhead")
         if philhead:
+            await message.add_reaction(philhead)
             await sended_message.add_reaction(philhead)
         else:
             print("Warning: No philhead found !")
