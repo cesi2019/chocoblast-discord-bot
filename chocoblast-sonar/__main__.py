@@ -25,6 +25,11 @@ def statistics_chocoblasted_user(user_id: int):
     cursor.close()
 
 class ChocoblastClient(Client):
+    COMMANDS = {
+        "chocoblast" : "Chocoblaster quelqu'un",
+        "top_chocoblast": "Top du nombre de chocoblast par personne"
+    }
+
     async def on_ready(self):
         print(f"{self.user} has connected to Discord!")
 
@@ -41,6 +46,8 @@ class ChocoblastClient(Client):
             await self.on_chocoblast(message)
         elif message_content == "!top_chocoblast":
             await self.on_top_chocoblast(message)
+        elif message_content == "!help":
+            await message.reply("\n".join((f"!{k}: {v}") for k, v in ChocoblastClient.COMMANDS.items()))
 
     async def on_chocoblast(self, message: Message):
         embed = Embed()
