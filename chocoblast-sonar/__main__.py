@@ -1,6 +1,6 @@
 import os
 
-from discord import Client, Embed, Message, user
+from discord import Client, Embed, Message, guild, user
 import discord
 from dotenv import load_dotenv
 import sqlite3
@@ -9,18 +9,44 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN", "")
 
 con = sqlite3.connect("chocoblast.db")
-cursor = con.cursor()
-cursor.execute("""CREATE TABLE IF NOT EXISTS statistics (
-    user_id INTEGER NOT NULL UNIQUE,
-    chocoblasted INTEGER NOT NULL DEFAULT 0
-);""")
-con.commit()
-cursor.close()
 
-def statistics_chocoblasted_user(user_id: int):
+def get_migration_version(path):
+    return int(path.split('_')[0].split("/")[::-1][0])
+
+def apply_migrations():
     cursor = con.cursor()
-    cursor.execute("INSERT OR IGNORE INTO statistics (user_id) VALUES (:user_id);", { "user_id": user_id })
-    cursor.execute("UPDATE statistics SET chocoblasted = chocoblasted + 1 WHERE user_id = :user_id;", { "user_id": user_id })
+
+    current_version = cursor.execute("pragma user_version").fetchone()[0]
+
+    print(f"Current migration version: {current_version}")
+
+    migrations_path = os.path.join(os.path.dirname(__file__), "migrations/")
+    migration_files = list(os.listdir(migrations_path))
+    for migration in sorted(migration_files):
+        path = f"{migrations_path}/{migration}"
+        migration_version = get_migration_version(path)
+
+        if migration_version <= current_version:
+            continue
+
+        print(f"Apply migration {migration}")
+
+        with open(path, "r") as f:
+            cursor.executescript(f.read())
+
+    con.commit()
+    cursor.close()
+
+def statistics_chocoblasted_user(guild_id: int, user_id: int):
+    cursor = con.cursor()
+    cursor.execute("INSERT OR IGNORE INTO statistics (guild_id, user_id) VALUES (:guild_id, :user_id);", {
+        "guild_id": guild_id,
+        "user_id": user_id
+    })
+    cursor.execute("UPDATE statistics SET chocoblasted = chocoblasted + 1 WHERE guild_id = :guild_id AND user_id = :user_id;", {
+        "guild_id": guild_id,
+        "user_id": user_id
+    })
     con.commit()
     cursor.close()
 
@@ -65,11 +91,13 @@ class ChocoblastClient(Client):
         else:
             print("Warning: No philhead found !")
 
-        statistics_chocoblasted_user(message.author.id)
+        statistics_chocoblasted_user(message.guild.id, message.author.id)
 
     async def on_top_chocoblast(self, message: Message):
         cursor = con.cursor()
-        cursor.execute("SELECT user_id, chocoblasted FROM statistics ORDER BY chocoblasted")
+        cursor.execute("SELECT user_id, chocoblasted FROM statistics WHERE guild_id = :guild_id ORDER BY chocoblasted", {
+            "guild_id": message.guild.id
+        })
 
         content_message = "Top:\n"
         for statistic in cursor.fetchall():
@@ -86,6 +114,7 @@ class ChocoblastClient(Client):
 
         await message.reply(content=content_message)
 
+apply_migrations()
 
 client = ChocoblastClient()
 client.run(TOKEN)
