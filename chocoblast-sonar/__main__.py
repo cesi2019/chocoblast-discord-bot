@@ -27,7 +27,8 @@ def statistics_chocoblasted_user(user_id: int):
 class ChocoblastClient(Client):
     COMMANDS = {
         "chocoblast" : "Chocoblaster quelqu'un",
-        "top_chocoblast": "Top du nombre de chocoblast par personne"
+        "top_chocoblast": "Top du nombre de chocoblast par personne",
+        "rules": "Afficher les règles"
     }
 
     async def on_ready(self):
@@ -46,6 +47,8 @@ class ChocoblastClient(Client):
             await self.on_chocoblast(message)
         elif message_content == "!top_chocoblast":
             await self.on_top_chocoblast(message)
+        elif message_content == "!rules":
+            await message.reply("https://www.chocoblast.fr/reglement/")
         elif message_content == "!help":
             await message.reply("\n".join((f"!{k}: {v}") for k, v in ChocoblastClient.COMMANDS.items()))
 
