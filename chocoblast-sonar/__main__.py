@@ -104,11 +104,7 @@ class ChocoblastClient(Client):
             user_id = statistic[0]
             chocoblasted = statistic[1]
 
-            user = self.get_user(user_id)
-            if not user:
-                user = await self.fetch_user(user_id)
-
-            content_message += f"- {user.display_name} : {chocoblasted}\n"
+            content_message += f"- <@{user_id}> : {chocoblasted}\n"
 
         cursor.close()
 
