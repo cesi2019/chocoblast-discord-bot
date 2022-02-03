@@ -204,9 +204,7 @@ class ChocoblastClient(Client):
         })
 
         if cursor.fetchone():
-            content_message = f"Une demande de vote existe déjà"
-
-            await message.reply(content=content_message)
+            await message.reply(content="Une demande de vote existe déjà")
 
             cursor.close()
 
