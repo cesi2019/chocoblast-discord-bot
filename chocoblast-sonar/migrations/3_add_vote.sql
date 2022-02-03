@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS votes (
+    guild_id INTEGER NOT NULL UNIQUE,
+    message_id INTEGER NOT NULL UNIQUE,
+    user_id INTEGER NOT NULL UNIQUE
+);
+
+PRAGMA user_version=3;
