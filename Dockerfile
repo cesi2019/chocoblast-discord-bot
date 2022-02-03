@@ -12,4 +12,6 @@ RUN apk add --no-cache build-base python3-dev && \
     find /usr/lib -name "__pycache__" -delete && \
     apk --purge del build-base python3-dev
 
+WORKDIR /usr/local/share/chocoblast
+
 CMD [ "python3", "-um", "chocoblast-sonar" ]
