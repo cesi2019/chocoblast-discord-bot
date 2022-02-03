@@ -76,7 +76,7 @@ class ChocoblastClient(Client):
         elif message_content == "!rules":
             await message.reply("https://www.chocoblast.fr/reglement/")
         elif message_content == "!help":
-            await message.reply("\n".join((f"!{k}: {v}") for k, v in ChocoblastClient.COMMANDS.items()))
+            await message.reply("\n".join((f"`!{k}`: {v}") for k, v in ChocoblastClient.COMMANDS.items()))
 
     async def on_chocoblast(self, message: Message):
         embed = Embed()
