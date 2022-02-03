@@ -8,5 +8,8 @@ setup(
    version="1.0",
    description="",
    packages=["chocoblast-sonar"],
+   package_data={
+       "chocoblast-sonar": ["migrations/*.sql"]
+   },
    install_requires=required
 )
