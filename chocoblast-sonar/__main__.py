@@ -119,7 +119,7 @@ class ChocoblastClient(Client):
 
         guild = self.get_guild(guild_id)
 
-        num_members = round(len(guild.members) / 2)
+        num_members = round(guild.member_count / 2)
         if num_members <= 0:
             num_members = 1
 
