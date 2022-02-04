@@ -85,7 +85,7 @@ class ChocoblastClient(Client):
     def get_vote(self, guild_id, message_id):
         cursor = con.cursor()
 
-        cursor.execute("SELECT guild_id, message_id, user_id FROM votes WHERE guild_id = :guild_id AND message_id = :message_id LIMIT 1", {
+        cursor.execute("SELECT guild_id, message_id, user_id FROM votes WHERE guild_id = :guild_id AND message_id = :message_id LIMIT 1;", {
             "guild_id": guild_id,
             "message_id": message_id
         })
@@ -177,7 +177,7 @@ class ChocoblastClient(Client):
 
     async def on_top_chocoblast(self, message: Message):
         cursor = con.cursor()
-        cursor.execute("SELECT user_id, chocoblasted FROM statistics WHERE guild_id = :guild_id ORDER BY chocoblasted", {
+        cursor.execute("SELECT user_id, chocoblasted FROM statistics WHERE guild_id = :guild_id ORDER BY chocoblasted;", {
             "guild_id": message.guild.id
         })
 
@@ -198,7 +198,7 @@ class ChocoblastClient(Client):
 
         cursor = con.cursor()
 
-        cursor.execute("SELECT guild_id, user_id FROM votes WHERE guild_id = :guild_id AND user_id = :user_id LIMIT 1", {
+        cursor.execute("SELECT guild_id, user_id FROM votes WHERE guild_id = :guild_id AND user_id = :user_id LIMIT 1;", {
             "guild_id": guild_id,
             "user_id": user_id
         })
