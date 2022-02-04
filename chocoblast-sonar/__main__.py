@@ -194,17 +194,19 @@ class ChocoblastClient(Client):
 
     async def on_vote_chocoblast(self, message: Message):
         guild_id = message.guild.id
+        channel_id = message.channel.id
         user_id = message.author.id
 
         cursor = con.cursor()
 
-        cursor.execute("SELECT guild_id, user_id FROM votes WHERE guild_id = :guild_id AND user_id = :user_id LIMIT 1;", {
+        cursor.execute("SELECT message_id FROM votes WHERE guild_id = :guild_id AND user_id = :user_id LIMIT 1;", {
             "guild_id": guild_id,
             "user_id": user_id
         })
+        vote = cursor.fetchone()
 
-        if cursor.fetchone():
-            await message.reply(content="Une demande de vote existe déjà")
+        if vote:
+            await message.reply(content=f"Une demande de vote existe déjà\n\nhttps://discord.com/channels/{guild_id}/{channel_id}/{vote[0]}")
 
             cursor.close()
 
