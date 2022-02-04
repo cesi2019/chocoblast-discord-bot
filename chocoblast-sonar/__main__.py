@@ -1,6 +1,6 @@
 import os
 
-from discord import Client, Embed, Message
+from discord import Client, Embed, Message, AllowedMentions
 import discord
 from discord.raw_models import RawReactionActionEvent
 from dotenv import load_dotenv
@@ -164,7 +164,10 @@ class ChocoblastClient(Client):
         embed = Embed()
         embed.set_image(url = "https://media.giphy.com/media/3o7TKD4yHgfzuvGWcg/giphy.gif")
 
-        sended_message = await message.reply(f"<@{message.author.id}> Nous offre les chocos !!!", embed = embed)
+        sended_message = await message.reply(f"<@{message.author.id}> Nous offre les chocos !!!",
+                                                embed = embed,
+                                                allowed_mentions = AllowedMentions.none(),
+                                                tts = True)
 
         philhead = discord.utils.get(message.guild.emojis, name="philhead")
         if philhead:
