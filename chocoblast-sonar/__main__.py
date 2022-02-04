@@ -1,6 +1,6 @@
 import os
 
-from discord import Client, Embed, Message, AllowedMentions
+from discord import Client, Embed, Message, AllowedMentions, Streaming
 import discord
 from discord.raw_models import RawReactionActionEvent
 from dotenv import load_dotenv
@@ -61,6 +61,8 @@ class ChocoblastClient(Client):
 
     async def on_ready(self):
         print(f"{self.user} has connected to Discord!")
+        
+        await self.change_presence(activity=Streaming(name="Mange des chocos", url="https://www.youtube.com/watch?v=yw35BYhKVoo"))
 
         for guild in self.guilds:
             print(f"{guild.name}")
