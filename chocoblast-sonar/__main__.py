@@ -8,6 +8,7 @@ import sqlite3
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN", "")
+ADMINS = os.getenv("DISCORD_ADMINS", "").split(",")
 
 con = sqlite3.connect("chocoblast.db")
 
@@ -56,7 +57,9 @@ class ChocoblastClient(Client):
         "chocoblast" : "Chocoblaster quelqu'un",
         "top_chocoblast": "Top du nombre de chocoblast par personne",
         "rules": "Afficher les règles",
-        "vote": "Voter pour décompter un chocoblast"
+        "vote": "Voter pour décompter un chocoblast",
+        "help": "Aide des commandes",
+        "validate_chocoblast": "Valider le chocoblast d'une personne (Admin uniquement)"
     }
 
     async def on_ready(self):
@@ -83,6 +86,8 @@ class ChocoblastClient(Client):
             await self.on_vote_chocoblast(message)
         elif message_content == "!help":
             await message.reply("\n".join((f"`!{k}`: {v}") for k, v in ChocoblastClient.COMMANDS.items()))
+        elif message_content.startswith("!validate_chocoblast"):
+            await self.on_validate_chocoblast(message)
 
     def get_vote(self, guild_id, message_id):
         cursor = con.cursor()
@@ -229,6 +234,32 @@ class ChocoblastClient(Client):
         con.commit()
 
         cursor.close()
+
+    async def on_validate_chocoblast(self, message: Message):
+        guild_id = message.guild.id
+        channel_id = message.channel.id
+        user_id = message.author.id
+
+        if str(user_id) not in ADMINS:
+            await message.reply(content=f"Tu n'es pas administrateur")
+
+            return
+
+        selected_user = next(iter(message.mentions), None)
+        if not selected_user:
+            await message.reply(content=f"Aucun utilisateur mentionné")
+
+            return
+
+        cursor = con.cursor()
+        cursor.execute("UPDATE statistics SET chocoblasted = chocoblasted - 1 WHERE guild_id = :guild_id AND user_id = :user_id AND chocoblasted > 0;", {
+            "guild_id": guild_id,
+            "user_id": selected_user.id
+        })
+        con.commit()
+        cursor.close()
+
+        await message.reply(content=f"La réception des chocos de <@{selected_user.id}> a bien été effectué")
 
 apply_migrations()
 
