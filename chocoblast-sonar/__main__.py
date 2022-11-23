@@ -56,7 +56,8 @@ class ChocoblastClient(Client):
         "chocoblast" : "Chocoblaster quelqu'un",
         "top_chocoblast": "Top du nombre de chocoblast par personne",
         "rules": "Afficher les règles",
-        "vote": "Voter pour décompter un chocoblast"
+        "vote": "Voter pour décompter un chocoblast",
+        "help": "Aide des commandes",
     }
 
     async def on_ready(self):
