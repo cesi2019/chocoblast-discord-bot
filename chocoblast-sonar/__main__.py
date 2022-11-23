@@ -56,8 +56,7 @@ class ChocoblastClient(Client):
         "chocoblast" : "Chocoblaster quelqu'un",
         "top_chocoblast": "Top du nombre de chocoblast par personne",
         "rules": "Afficher les règles",
-        "vote": "Voter pour décompter un chocoblast",
-        "help": "Aide des commandes",
+        "vote": "Voter pour décompter un chocoblast"
     }
 
     async def on_ready(self):
@@ -233,5 +232,8 @@ class ChocoblastClient(Client):
 
 apply_migrations()
 
-client = ChocoblastClient()
+intents = discord.Intents.default()
+intents.message_content = True
+
+client = ChocoblastClient(intents=intents)
 client.run(TOKEN)
