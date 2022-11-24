@@ -187,7 +187,7 @@ class ChocoblastClient(Client):
 
     async def on_top_chocoblast(self, message: Message):
         cursor = con.cursor()
-        cursor.execute("SELECT user_id, chocoblasted FROM statistics WHERE guild_id = :guild_id ORDER BY chocoblasted;", {
+        cursor.execute("SELECT user_id, chocoblasted FROM statistics WHERE guild_id = :guild_id AND chocoblasted > 0 ORDER BY chocoblasted;", {
             "guild_id": message.guild.id
         })
 
