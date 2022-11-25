@@ -259,7 +259,7 @@ class ChocoblastClient(Client):
         con.commit()
         cursor.close()
 
-        await message.reply(content=f"La réception des chocos de <@{selected_user.id}> a bien été effectué")
+        await message.reply(content=f"La réception des chocos de <@{selected_user.id}> a bien été effectuée")
 
 apply_migrations()
 
